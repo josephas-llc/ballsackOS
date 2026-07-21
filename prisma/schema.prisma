@@ -1,0 +1,944 @@
+// ballsackOS - Texas Adult Soccer League Management System
+// Prisma Schema with Sponsorship & Advertising built-in
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// AUTHENTICATION & USERS
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  phone         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Auth
+  accounts Account[]
+  sessions Session[]
+
+  // Roles
+  roles UserRole[]
+
+  // Player profile (optional - not all users are players)
+  player Player?
+
+  // Referee profile (optional)
+  referee Referee?
+
+  // Sponsor contact (optional - for sponsor reps)
+  sponsorContact SponsorContact?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// User can have multiple roles (league admin, club admin, coach, etc.)
+model UserRole {
+  id        String   @id @default(cuid())
+  userId    String
+  role      Role
+  // Scope of the role (league, club, or team level)
+  leagueId  String?
+  clubId    String?
+  teamId    String?
+  createdAt DateTime @default(now())
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  league League? @relation(fields: [leagueId], references: [id])
+  club   Club?   @relation(fields: [clubId], references: [id])
+  team   Team?   @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, role, leagueId, clubId, teamId])
+}
+
+enum Role {
+  SUPER_ADMIN       // Platform-wide admin
+  LEAGUE_OWNER      // Owns the league (you)
+  LEAGUE_ADMIN      // League administrators
+  CLUB_ADMIN        // Club administrators
+  TEAM_MANAGER      // Team manager/coach
+  REFEREE_ADMIN     // Manages referee assignments
+  SPONSOR_ADMIN     // Manages sponsors/ads
+}
+
+// ============================================
+// LEAGUE STRUCTURE
+// ============================================
+
+model League {
+  id          String   @id @default(cuid())
+  name        String   // e.g., "Texas Select League"
+  slug        String   @unique // e.g., "texas-select-league"
+  description String?
+  logo        String?
+  website     String?
+
+  // Location
+  city        String?
+  state       String   @default("TX")
+  country     String   @default("US")
+  timezone    String   @default("America/Chicago")
+
+  // Settings
+  isActive    Boolean  @default(true)
+  isPublic    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  seasons     Season[]
+  divisions   Division[]
+  clubs       Club[]
+  venues      Venue[]
+  referees    LeagueReferee[]
+  userRoles   UserRole[]
+
+  // Sponsorship
+  sponsors    LeagueSponsor[]
+  adPlacements AdPlacement[]
+}
+
+model Season {
+  id          String       @id @default(cuid())
+  leagueId    String
+  name        String       // e.g., "Spring 2025"
+  slug        String
+  startDate   DateTime
+  endDate     DateTime
+  status      SeasonStatus @default(UPCOMING)
+
+  // Registration
+  registrationOpen  DateTime?
+  registrationClose DateTime?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  league      League       @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  teamSeasons TeamSeason[]
+  games       Game[]
+  tournaments Tournament[]
+
+  @@unique([leagueId, slug])
+}
+
+enum SeasonStatus {
+  UPCOMING
+  REGISTRATION
+  IN_PROGRESS
+  PLAYOFFS
+  COMPLETED
+}
+
+model Division {
+  id          String     @id @default(cuid())
+  leagueId    String
+  name        String     // e.g., "Men's Premier", "Women's Open"
+  slug        String
+  gender      Gender
+  level       DivisionLevel
+  description String?
+  sortOrder   Int        @default(0)
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  league      League     @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  teams       Team[]
+  games       Game[]
+
+  @@unique([leagueId, slug])
+}
+
+enum Gender {
+  MENS
+  WOMENS
+  COED
+}
+
+enum DivisionLevel {
+  PREMIER     // Upper/competitive
+  OPEN        // Lower/recreational
+}
+
+// ============================================
+// CLUBS & TEAMS
+// ============================================
+
+model Club {
+  id          String   @id @default(cuid())
+  leagueId    String
+  name        String   // e.g., "Austin FC Rec"
+  slug        String
+  description String?
+  logo        String?
+  website     String?
+
+  // Primary location/area
+  city        String?
+  neighborhood String? // e.g., "North Austin"
+
+  // Colors
+  primaryColor   String? // Hex color
+  secondaryColor String?
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  league      League   @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  teams       Team[]
+  homeVenues  ClubVenue[]
+  userRoles   UserRole[]
+
+  // Sponsorship - clubs can have their own sponsors
+  sponsors    ClubSponsor[]
+
+  @@unique([leagueId, slug])
+}
+
+model Team {
+  id          String   @id @default(cuid())
+  clubId      String
+  divisionId  String
+  name        String   // e.g., "Austin FC Rec Men's First"
+  slug        String
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  club        Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  division    Division @relation(fields: [divisionId], references: [id])
+
+  players     TeamPlayer[]
+  seasons     TeamSeason[]
+  homeGames   Game[]   @relation("HomeTeam")
+  awayGames   Game[]   @relation("AwayTeam")
+  userRoles   UserRole[]
+
+  @@unique([clubId, slug])
+}
+
+model TeamSeason {
+  id        String   @id @default(cuid())
+  teamId    String
+  seasonId  String
+
+  // Season stats (denormalized for performance)
+  wins      Int      @default(0)
+  losses    Int      @default(0)
+  draws     Int      @default(0)
+  goalsFor  Int      @default(0)
+  goalsAgainst Int   @default(0)
+  points    Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  season    Season   @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, seasonId])
+}
+
+// ============================================
+// PLAYERS
+// ============================================
+
+model Player {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+
+  // Profile
+  firstName   String
+  lastName    String
+  dateOfBirth DateTime?
+  gender      Gender?
+
+  // Jersey
+  preferredNumber Int?
+  preferredPosition String?
+
+  // Emergency contact
+  emergencyName  String?
+  emergencyPhone String?
+
+  // Waivers
+  waiverSigned   Boolean  @default(false)
+  waiverSignedAt DateTime?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teams       TeamPlayer[]
+  gameStats   PlayerGameStats[]
+}
+
+model TeamPlayer {
+  id          String   @id @default(cuid())
+  teamId      String
+  playerId    String
+
+  jerseyNumber Int?
+  position     String?
+  isCaptain    Boolean @default(false)
+  isActive     Boolean @default(true)
+
+  joinedAt    DateTime @default(now())
+  leftAt      DateTime?
+
+  team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  player      Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, playerId])
+}
+
+// ============================================
+// VENUES & FIELDS
+// ============================================
+
+model Venue {
+  id          String   @id @default(cuid())
+  leagueId    String
+  name        String   // e.g., "Round Rock Multipurpose Complex"
+  slug        String
+
+  // Address
+  address     String
+  city        String
+  state       String   @default("TX")
+  zipCode     String
+
+  // Coordinates for maps
+  latitude    Float?
+  longitude   Float?
+
+  // Amenities
+  hasLights       Boolean @default(false)
+  hasParking      Boolean @default(true)
+  hasRestrooms    Boolean @default(true)
+  hasConcessions  Boolean @default(false)
+
+  // Contact
+  contactName  String?
+  contactPhone String?
+  contactEmail String?
+
+  notes       String?
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  league      League   @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  fields      Field[]
+  clubVenues  ClubVenue[]
+
+  @@unique([leagueId, slug])
+}
+
+model Field {
+  id          String   @id @default(cuid())
+  venueId     String
+  name        String   // e.g., "Field 1", "North Pitch"
+
+  // Size
+  isFullSize  Boolean  @default(true) // 11v11
+  surfaceType String?  // "grass", "turf", "artificial"
+
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  venue       Venue    @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  games       Game[]
+  availability FieldAvailability[]
+}
+
+model FieldAvailability {
+  id        String   @id @default(cuid())
+  fieldId   String
+
+  dayOfWeek Int      // 0=Sunday, 6=Saturday
+  startTime String   // "18:00"
+  endTime   String   // "22:00"
+
+  // Or specific date override
+  specificDate DateTime?
+  isBlocked    Boolean   @default(false) // For blackout dates
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  field     Field    @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+}
+
+model ClubVenue {
+  id       String  @id @default(cuid())
+  clubId   String
+  venueId  String
+  isPrimary Boolean @default(false)
+
+  club     Club    @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  venue    Venue   @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@unique([clubId, venueId])
+}
+
+// ============================================
+// GAMES & SCHEDULING
+// ============================================
+
+model Game {
+  id          String     @id @default(cuid())
+  seasonId    String
+  divisionId  String
+
+  homeTeamId  String
+  awayTeamId  String
+  fieldId     String?
+
+  // Scheduling
+  scheduledAt DateTime
+  duration    Int        @default(90) // minutes
+
+  status      GameStatus @default(SCHEDULED)
+
+  // Scores
+  homeScore   Int?
+  awayScore   Int?
+
+  // Match details
+  isPlayoff   Boolean    @default(false)
+  isFinal     Boolean    @default(false) // Championship game
+  round       Int?       // For round-robin tracking
+
+  // Tournament (if part of one)
+  tournamentId    String?
+  tournamentRound String?  // "Quarter-Final", "Semi-Final", etc.
+
+  notes       String?
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  season      Season     @relation(fields: [seasonId], references: [id])
+  division    Division   @relation(fields: [divisionId], references: [id])
+  homeTeam    Team       @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam    Team       @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  field       Field?     @relation(fields: [fieldId], references: [id])
+  tournament  Tournament? @relation(fields: [tournamentId], references: [id])
+
+  refereeAssignments GameReferee[]
+  playerStats        PlayerGameStats[]
+  events             GameEvent[]
+}
+
+enum GameStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  POSTPONED
+  CANCELLED
+}
+
+model GameEvent {
+  id        String    @id @default(cuid())
+  gameId    String
+  type      EventType
+  minute    Int?
+  playerId  String?   // Optional - some events aren't player-specific
+  teamId    String?
+  details   String?
+
+  createdAt DateTime  @default(now())
+
+  game      Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
+}
+
+enum EventType {
+  GOAL
+  OWN_GOAL
+  ASSIST
+  YELLOW_CARD
+  RED_CARD
+  SUBSTITUTION
+  INJURY
+  PENALTY_SCORED
+  PENALTY_MISSED
+  PENALTY_SAVED
+}
+
+model PlayerGameStats {
+  id          String   @id @default(cuid())
+  gameId      String
+  playerId    String
+
+  // Stats
+  goals       Int      @default(0)
+  assists     Int      @default(0)
+  yellowCards Int      @default(0)
+  redCards    Int      @default(0)
+  minutesPlayed Int?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  game        Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  player      Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([gameId, playerId])
+}
+
+// ============================================
+// REFEREES
+// ============================================
+
+model Referee {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+
+  // Certification
+  certificationLevel String?  // "Grade 8", "Grade 7", etc.
+  certificationExpiry DateTime?
+
+  // Payment
+  paymentRate   Decimal?  // Per game rate
+  paymentMethod String?   // "venmo", "zelle", "check"
+  paymentHandle String?   // @username or email
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leagues     LeagueReferee[]
+  availability RefereeAvailability[]
+  assignments  GameReferee[]
+}
+
+model LeagueReferee {
+  id        String   @id @default(cuid())
+  leagueId  String
+  refereeId String
+
+  isApproved Boolean @default(false)
+  approvedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  league    League   @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  referee   Referee  @relation(fields: [refereeId], references: [id], onDelete: Cascade)
+
+  @@unique([leagueId, refereeId])
+}
+
+model RefereeAvailability {
+  id          String   @id @default(cuid())
+  refereeId   String
+
+  // Recurring availability
+  dayOfWeek   Int?     // 0=Sunday
+  startTime   String?  // "18:00"
+  endTime     String?  // "22:00"
+
+  // Or specific date
+  specificDate DateTime?
+  isAvailable  Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  referee     Referee  @relation(fields: [refereeId], references: [id], onDelete: Cascade)
+}
+
+model GameReferee {
+  id          String        @id @default(cuid())
+  gameId      String
+  refereeId   String
+  role        RefereeRole   @default(CENTER)
+
+  status      AssignmentStatus @default(PENDING)
+  respondedAt DateTime?
+
+  // Payment tracking
+  isPaid      Boolean       @default(false)
+  paidAt      DateTime?
+  paymentAmount Decimal?
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  game        Game          @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  referee     Referee       @relation(fields: [refereeId], references: [id], onDelete: Cascade)
+
+  @@unique([gameId, refereeId])
+}
+
+enum RefereeRole {
+  CENTER
+  ASSISTANT_1
+  ASSISTANT_2
+  FOURTH_OFFICIAL
+}
+
+enum AssignmentStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  NO_SHOW
+}
+
+// ============================================
+// TOURNAMENTS
+// ============================================
+
+model Tournament {
+  id          String   @id @default(cuid())
+  seasonId    String
+  name        String
+  slug        String
+
+  format      TournamentFormat
+  startDate   DateTime
+  endDate     DateTime
+
+  // Settings
+  teamsPerGroup Int?   // For group stage
+  groupCount    Int?
+
+  status      TournamentStatus @default(UPCOMING)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  season      Season   @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  games       Game[]
+  teams       TournamentTeam[]
+
+  @@unique([seasonId, slug])
+}
+
+enum TournamentFormat {
+  SINGLE_ELIMINATION
+  DOUBLE_ELIMINATION
+  ROUND_ROBIN
+  GROUP_KNOCKOUT // Group stage + knockout rounds
+}
+
+enum TournamentStatus {
+  UPCOMING
+  REGISTRATION
+  IN_PROGRESS
+  COMPLETED
+}
+
+model TournamentTeam {
+  id           String   @id @default(cuid())
+  tournamentId String
+  teamId       String
+
+  seed         Int?
+  groupLetter  String?  // "A", "B", etc.
+
+  // Group stage stats
+  groupWins    Int      @default(0)
+  groupLosses  Int      @default(0)
+  groupDraws   Int      @default(0)
+  groupGoalsFor Int     @default(0)
+  groupGoalsAgainst Int @default(0)
+  groupPoints  Int      @default(0)
+
+  isEliminated Boolean  @default(false)
+  finalPosition Int?    // 1st, 2nd, 3rd, etc.
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+
+  @@unique([tournamentId, teamId])
+}
+
+// ============================================
+// SPONSORSHIP & ADVERTISING
+// ============================================
+
+model Sponsor {
+  id          String   @id @default(cuid())
+  name        String   // e.g., "Texian Insurance"
+  slug        String   @unique
+
+  // Branding
+  logo        String?
+  logoLight   String?  // For dark backgrounds
+  logoDark    String?  // For light backgrounds
+  website     String?
+  tagline     String?
+
+  // Company info
+  industry    String?  // "Insurance", "Sports Equipment", etc.
+  description String?
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  contacts    SponsorContact[]
+  leagueSponsors LeagueSponsor[]
+  clubSponsors   ClubSponsor[]
+  adPlacements   AdPlacement[]
+  campaigns      AdCampaign[]
+}
+
+model SponsorContact {
+  id          String   @id @default(cuid())
+  sponsorId   String
+  userId      String   @unique
+
+  title       String?  // "Marketing Director"
+  isPrimary   Boolean  @default(false)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sponsor     Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// League-level sponsorship (e.g., "Presented by Texian Insurance")
+model LeagueSponsor {
+  id          String   @id @default(cuid())
+  leagueId    String
+  sponsorId   String
+
+  tier        SponsorTier
+
+  // Contract details
+  startDate   DateTime
+  endDate     DateTime
+  contractValue Decimal?
+
+  // Benefits
+  isTitleSponsor    Boolean @default(false) // "Texas Select League presented by..."
+  logoOnJerseys     Boolean @default(false)
+  logoOnWebsite     Boolean @default(true)
+  socialMediaPosts  Int     @default(0) // Number of posts per month
+  emailMentions     Int     @default(0) // Mentions in league emails
+  fieldSignage      Boolean @default(false)
+  programAdPages    Int     @default(0) // Pages in game programs
+  announcerMentions Boolean @default(false)
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  league      League   @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  sponsor     Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+
+  @@unique([leagueId, sponsorId])
+}
+
+// Club-level sponsorship
+model ClubSponsor {
+  id          String   @id @default(cuid())
+  clubId      String
+  sponsorId   String
+
+  tier        SponsorTier
+
+  startDate   DateTime
+  endDate     DateTime
+  contractValue Decimal?
+
+  // Benefits specific to club
+  logoOnClubJerseys Boolean @default(false)
+  clubWebsiteLogo   Boolean @default(true)
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  club        Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  sponsor     Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+
+  @@unique([clubId, sponsorId])
+}
+
+enum SponsorTier {
+  TITLE       // "Presented by" - top tier
+  PLATINUM
+  GOLD
+  SILVER
+  BRONZE
+  SUPPORTER   // Lowest tier, basic logo placement
+}
+
+// Ad campaigns for digital placements
+model AdCampaign {
+  id          String   @id @default(cuid())
+  sponsorId   String
+  name        String   // "Fall 2025 Registration Push"
+
+  startDate   DateTime
+  endDate     DateTime
+  budget      Decimal?
+
+  // Targeting
+  targetGender    Gender?
+  targetDivisions String[] // Division IDs
+  targetClubs     String[] // Club IDs
+
+  status      CampaignStatus @default(DRAFT)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sponsor     Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+  placements  AdPlacement[]
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+// Individual ad placements
+model AdPlacement {
+  id          String   @id @default(cuid())
+  sponsorId   String
+  campaignId  String?
+  leagueId    String?
+
+  // Creative
+  imageUrl    String
+  altText     String?
+  clickUrl    String?
+
+  // Placement location
+  placement   AdPlacementLocation
+
+  // Display rules
+  startDate   DateTime
+  endDate     DateTime
+  priority    Int      @default(0) // Higher = more likely to show
+  weight      Int      @default(1) // For rotation among same-priority ads
+
+  // Targeting (optional)
+  targetDivisions String[]
+  targetClubs     String[]
+
+  isActive    Boolean  @default(true)
+
+  // Analytics
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sponsor     Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+  campaign    AdCampaign? @relation(fields: [campaignId], references: [id])
+  league      League?  @relation(fields: [leagueId], references: [id])
+}
+
+enum AdPlacementLocation {
+  // Website placements
+  HOMEPAGE_HERO           // Main hero banner
+  HOMEPAGE_SIDEBAR
+  SCHEDULE_BANNER
+  STANDINGS_BANNER
+  TEAM_PAGE_BANNER
+  GAME_PAGE_SPONSOR       // "This game brought to you by..."
+
+  // Email placements
+  EMAIL_HEADER
+  EMAIL_FOOTER
+  EMAIL_INLINE
+
+  // App placements (future)
+  APP_SPLASH_SCREEN
+  APP_BANNER
+  APP_INTERSTITIAL
+}
+
+// Track sponsor value/ROI
+model SponsorImpression {
+  id          String   @id @default(cuid())
+  sponsorId   String
+  placementId String?
+
+  type        ImpressionType
+  timestamp   DateTime @default(now())
+
+  // Context
+  userId      String?
+  sessionId   String?
+  pageUrl     String?
+
+  // Device info
+  deviceType  String?  // "mobile", "desktop", "tablet"
+  browser     String?
+
+  @@index([sponsorId, timestamp])
+  @@index([placementId, timestamp])
+}
+
+enum ImpressionType {
+  VIEW
+  CLICK
+  CONVERSION // Clicked through and took action (signup, etc.)
+}
