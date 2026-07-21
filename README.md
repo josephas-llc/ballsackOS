@@ -1,36 +1,169 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ballsackOS
+
+**Texas Adult Soccer League Management Platform**
+
+A comprehensive soccer league management system built for the Texas adult recreational soccer community. Designed from the ground up with sponsorship and advertising capabilities, live broadcasting support, and mobile-first field-side experience.
+
+**Title Sponsor:** [Texian Insurance](https://texianinsurance.com)
+
+## Features
+
+- **League Management** - Seasons, divisions, clubs, teams, players
+- **Game Scheduling** - Intelligent scheduling with conflict detection and optimization
+- **Referee System** - Availability tracking, auto-assignment, payment management
+- **Live Scoring** - Real-time score entry and updates
+- **Standings & Stats** - Automatic standings calculation and player statistics
+- **Tournaments** - Single/double elimination, group stages, playoffs
+- **Sponsorship Platform** - Tiered sponsorships, ad placements, analytics
+- **Broadcasting** - Live stream integration with sponsor overlays
+- **Mobile PWA** - Offline-capable, field-side optimized
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **Database:** PostgreSQL with Prisma 7
+- **API:** tRPC for type-safe APIs
+- **Auth:** NextAuth.js v5
+- **Styling:** Tailwind CSS
+- **Deployment:** Linux VM (self-hosted)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- PostgreSQL 15+
+- npm
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/josephas-llc/ballsackOS.git
+cd ballsackOS
+
+# Install dependencies
+npm install
+
+# Copy environment variables
+cp .env.example .env
+# Edit .env with your database connection string
+
+# Generate Prisma client
+npx prisma generate
+
+# Run database migrations
+npx prisma migrate dev
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+ballsackOS/
+├── prisma/
+│   └── schema.prisma          # Database schema
+├── src/
+│   ├── app/                   # Next.js app router
+│   │   ├── api/trpc/          # tRPC API endpoint
+│   │   └── (pages)/           # Page components
+│   ├── lib/                   # Utilities
+│   │   ├── prisma.ts          # Database client
+│   │   └── trpc.ts            # tRPC client
+│   └── server/
+│       └── routers/           # tRPC routers
+│           ├── league.ts      # League endpoints
+│           ├── game.ts        # Game endpoints
+│           └── sponsor.ts     # Sponsorship endpoints
+├── docs/
+│   └── reference/             # Reference materials
+└── public/                    # Static assets
+```
 
-## Learn More
+## Development Roadmap
 
-To learn more about Next.js, take a look at the following resources:
+### Phase 1: MVP
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Core functionality to launch a functional league:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [#1](../../issues/1) PostgreSQL setup on Linux VM
+- [#2](../../issues/2) Authentication (NextAuth.js)
+- [#3](../../issues/3) Admin Dashboard
+- [#4](../../issues/4) Player Portal
+- [#5](../../issues/5) Fan/Spectator Public Site
+- [#7](../../issues/7) Schedule Optimization Algorithm
+- [#8](../../issues/8) Referee Assignment System
+- [#9](../../issues/9) Texian Insurance Title Sponsorship
+- [#17](../../issues/17) Deployment & CI/CD
+- [#18](../../issues/18) Live Score Entry
+- [#22](../../issues/22) Venue & Field Management
+- [#28](../../issues/28) Texas League Rules Configuration
 
-## Deploy on Vercel
+### Phase 2: Core Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Enhanced functionality after MVP launch:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [#6](../../issues/6) Live Broadcasting System
+- [#10](../../issues/10) Sponsor Analytics Dashboard
+- [#11](../../issues/11) Tournament System
+- [#12](../../issues/12) Notifications (Email, SMS, Push)
+- [#13](../../issues/13) PWA & Mobile Experience
+- [#14](../../issues/14) Player Registration & Payments
+- [#19](../../issues/19) Stats & Leaderboards
+- [#20](../../issues/20) Club Branding & Subdomains
+- [#21](../../issues/21) Calendar Integration
+- [#23](../../issues/23) Disciplinary System
+- [#24](../../issues/24) Team Messaging
+- [#26](../../issues/26) SEO & Social Media
+
+### Phase 3: Advanced Features
+
+Polish and expansion:
+
+- [#15](../../issues/15) Multi-language Support (Spanish)
+- [#16](../../issues/16) Public API & Developer Access
+- [#25](../../issues/25) Photo & Media Gallery
+- [#27](../../issues/27) Data Import/Export Tools
+
+## League Structure
+
+```
+League (Texas Select League)
+└── Divisions
+    ├── Men's Premier (competitive)
+    ├── Men's Open (recreational)
+    ├── Women's Premier (competitive)
+    └── Women's Open (recreational)
+        └── Clubs (geographically based)
+            ├── Men's Team (required)
+            ├── Women's Team (required)
+            └── Additional teams (optional)
+```
+
+## Sponsorship Tiers
+
+| Tier | Benefits |
+|------|----------|
+| **Title** | "Presented by" branding, all placements, broadcast integration |
+| **Platinum** | Logo on website, field signage, email mentions |
+| **Gold** | Logo on website, social media posts |
+| **Silver** | Logo on website, program ads |
+| **Bronze** | Logo on sponsors page |
+| **Supporter** | Basic logo placement |
+
+## Contributing
+
+This is a private project for Josephas LLC. Contact the maintainers for access.
+
+## License
+
+Proprietary - All rights reserved.
+
+---
+
+Built with [Next.js](https://nextjs.org) and [Prisma](https://prisma.io)
