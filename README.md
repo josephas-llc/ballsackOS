@@ -1,8 +1,10 @@
 # ballsackOS
 
-**Texas Select League Management Platform**
+**Chisholm FC League Management Platform**
 
-A comprehensive soccer league management system for competitive adult soccer in Central Texas. This isn't rec soccer - it's a legitimate pathway for serious players who can't go pro due to life choices, aspiring players developing toward higher levels, and adults who want real competition while building careers and families.
+A comprehensive soccer league management system for the **Chisholm FC League** - a competitive adult soccer league operating along the historic Chisholm Trail corridor (I-35) in Central Texas, from Waco to San Antonio.
+
+This isn't rec soccer - it's a legitimate pathway for serious players who can't go pro due to life choices, aspiring players developing toward higher levels, and adults who want real competition while building careers and families.
 
 **Key differentiator:** Combined gender match days where men's and women's results determine club championships together. No other adult league does this.
 
@@ -135,17 +137,19 @@ Polish and expansion:
 ## League Structure
 
 ```
-League (Texas Select League)
+Chisholm FC League
 └── Divisions
     ├── Men's Premier (competitive)
     ├── Men's Open (recreational)
     ├── Women's Premier (competitive)
     └── Women's Open (recreational)
-        └── Clubs (geographically based)
+        └── Clubs (geographically based, 12 planned)
             ├── Men's Team (required)
             ├── Women's Team (required)
-            └── Additional teams (optional)
+            └── Additional teams (2-3 per gender for internal competition)
 ```
+
+**Combined Club Scoring:** Men's + Women's match results determine club championship standings.
 
 ## Sponsorship Tiers
 

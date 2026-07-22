@@ -1,8 +1,8 @@
-# Texas Select League Model
+# Chisholm FC League Model
 
 ## Overview
 
-ballsackOS powers a competitive adult soccer league in Texas - not just "rec soccer," but a legitimate pathway for serious players.
+ballsackOS powers the **Chisholm FC League** - a competitive adult soccer league operating along the historic Chisholm Trail corridor (I-35) in Central Texas. This isn't "rec soccer" - it's a legitimate pathway for serious players.
 
 ### Who Plays Here
 
@@ -31,7 +31,7 @@ Inspired by the KC Select League model but enhanced with women's integration, sp
 ## League Structure
 
 ```
-Texas Select League (or your chosen name)
+Chisholm FC League
 │
 ├── Divisions
 │   ├── Men's Premier (competitive)

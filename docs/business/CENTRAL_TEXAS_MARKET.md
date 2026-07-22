@@ -2,7 +2,7 @@
 
 ## Geographic Footprint
 
-The Texas Select League focuses on the I-35 corridor between Waco and San Antonio - a ~150 mile stretch with excellent soccer demographics and manageable drive times.
+The **Chisholm FC League** focuses on the I-35 corridor between Waco and San Antonio - a ~150 mile stretch along the historic Chisholm Trail with excellent soccer demographics and manageable drive times.
 
 ```
                     WACO (Baylor University)
@@ -97,7 +97,7 @@ Dallas and Houston are better served by their own regional leagues. Central Texa
 ### With 12 Clubs (2-3 teams per club)
 
 ```
-Texas Select League
+Chisholm FC League
 ├── Men's Premier Division (~12 teams) - competitive
 ├── Men's Open Division (~12 teams) - recreational
 ├── Women's Premier Division (~12 teams) - competitive
