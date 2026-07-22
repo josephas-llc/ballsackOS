@@ -161,6 +161,8 @@ model Season {
 
   league      League       @relation(fields: [leagueId], references: [id], onDelete: Cascade)
   teamSeasons TeamSeason[]
+  clubSeasons ClubSeason[]
+  matchDays   MatchDay[]
   games       Game[]
   tournaments Tournament[]
 
@@ -235,6 +237,9 @@ model Club {
   teams       Team[]
   homeVenues  ClubVenue[]
   userRoles   UserRole[]
+  seasons     ClubSeason[]
+  homeMatchDays MatchDay[] @relation("HomeClub")
+  awayMatchDays MatchDay[] @relation("AwayClub")
 
   // Sponsorship - clubs can have their own sponsors
   sponsors    ClubSponsor[]
@@ -285,6 +290,40 @@ model TeamSeason {
   season    Season   @relation(fields: [seasonId], references: [id], onDelete: Cascade)
 
   @@unique([teamId, seasonId])
+}
+
+// Club-level combined standings (Men's + Women's combined)
+model ClubSeason {
+  id        String   @id @default(cuid())
+  clubId    String
+  seasonId  String
+
+  // Combined stats (Men's + Women's)
+  mensWins        Int @default(0)
+  mensLosses      Int @default(0)
+  mensDraws       Int @default(0)
+  mensGoalsFor    Int @default(0)
+  mensGoalsAgainst Int @default(0)
+  mensPoints      Int @default(0)
+
+  womensWins        Int @default(0)
+  womensLosses      Int @default(0)
+  womensDraws       Int @default(0)
+  womensGoalsFor    Int @default(0)
+  womensGoalsAgainst Int @default(0)
+  womensPoints      Int @default(0)
+
+  // Combined totals (what determines championship)
+  totalPoints       Int @default(0) // mensPoints + womensPoints
+  totalGoalDiff     Int @default(0) // (mensGF - mensGA) + (womensGF - womensGA)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  club      Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  season    Season   @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@unique([clubId, seasonId])
 }
 
 // ============================================
@@ -380,6 +419,7 @@ model Venue {
   league      League   @relation(fields: [leagueId], references: [id], onDelete: Cascade)
   fields      Field[]
   clubVenues  ClubVenue[]
+  matchDays   MatchDay[]
 
   @@unique([leagueId, slug])
 }
@@ -437,10 +477,47 @@ model ClubVenue {
 // GAMES & SCHEDULING
 // ============================================
 
+// A MatchDay is when two clubs face off - includes BOTH men's and women's games
+model MatchDay {
+  id            String   @id @default(cuid())
+  seasonId      String
+  homeClubId    String
+  awayClubId    String
+  venueId       String?
+
+  // Scheduling
+  date          DateTime // The match day date
+  round         Int?     // Round in the season (1, 2, 3...)
+
+  // Combined results (calculated after both games complete)
+  homeClubPoints Int?    // 0-6 possible (win=3, draw=1 for each game)
+  awayClubPoints Int?
+
+  status        MatchDayStatus @default(SCHEDULED)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  season        Season   @relation(fields: [seasonId], references: [id])
+  homeClub      Club     @relation("HomeClub", fields: [homeClubId], references: [id])
+  awayClub      Club     @relation("AwayClub", fields: [awayClubId], references: [id])
+  venue         Venue?   @relation(fields: [venueId], references: [id])
+  games         Game[]   // Contains both men's and women's games
+}
+
+enum MatchDayStatus {
+  SCHEDULED
+  IN_PROGRESS  // One or both games happening
+  COMPLETED
+  POSTPONED
+  CANCELLED
+}
+
 model Game {
   id          String     @id @default(cuid())
   seasonId    String
   divisionId  String
+  matchDayId  String?    // Links men's and women's games together
 
   homeTeamId  String
   awayTeamId  String
@@ -472,6 +549,7 @@ model Game {
 
   season      Season     @relation(fields: [seasonId], references: [id])
   division    Division   @relation(fields: [divisionId], references: [id])
+  matchDay    MatchDay?  @relation(fields: [matchDayId], references: [id])
   homeTeam    Team       @relation("HomeTeam", fields: [homeTeamId], references: [id])
   awayTeam    Team       @relation("AwayTeam", fields: [awayTeamId], references: [id])
   field       Field?     @relation(fields: [fieldId], references: [id])

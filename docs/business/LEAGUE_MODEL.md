@@ -30,17 +30,63 @@ Texas Select League (or your chosen name)
     └── Women's Second Team (optional)
 ```
 
-## Season Format
+## Match Day Format
 
-### Double Round-Robin
+### Combined Gender Match Days
 
-Each team plays every other team in their division twice (home and away).
+Every match day features BOTH the men's and women's teams playing:
 
-| Division Size | Games per Team | Total Games per Division |
-|---------------|----------------|--------------------------|
-| 6 teams | 10 games | 30 games |
-| 8 teams | 14 games | 56 games |
-| 10 teams | 18 games | 90 games |
+```
+Match Day: Round Rock United vs Cedar Park Athletic
+
+  5:00 PM - Women's Match: RR United Women vs CP Athletic Women
+  7:00 PM - Men's Match: RR United Men vs CP Athletic Men
+
+  → Combined result determines CLUB standings
+```
+
+**Why this matters:**
+
+| Benefit | Description |
+|---------|-------------|
+| **Equal investment** | Women's games aren't afterthoughts |
+| **Club identity** | Fans come for the club, stay for both games |
+| **Sponsorship value** | 2 games of exposure per match day |
+| **Community building** | Men's and women's teams support each other |
+| **Unique positioning** | No other adult league does this |
+
+### Combined Club Scoring
+
+Club standings are determined by COMBINED men's and women's results:
+
+```
+Example Match Day Results:
+
+Round Rock United Women 2 - 1 Cedar Park Women (Win = 3 pts)
+Round Rock United Men 1 - 1 Cedar Park Men (Draw = 1 pt)
+
+Round Rock United CLUB TOTAL: 4 points
+Cedar Park Athletic CLUB TOTAL: 1 point
+```
+
+### Club Standings Table
+
+| Club | M-W | M-D | M-L | W-W | W-D | W-L | Club Pts |
+|------|-----|-----|-----|-----|-----|-----|----------|
+| Round Rock United | 5 | 2 | 1 | 6 | 1 | 1 | 35 |
+| Cedar Park Athletic | 4 | 3 | 1 | 5 | 2 | 1 | 32 |
+| ... | | | | | | | |
+
+### Season Format
+
+#### Double Round-Robin
+
+Each CLUB plays every other club twice (home and away), with both genders playing each match day.
+
+| Clubs | Match Days per Club | Games per Club | Total Match Days |
+|-------|---------------------|----------------|------------------|
+| 10 clubs | 18 | 36 (18 men + 18 women) | 90 |
+| 12 clubs | 22 | 44 (22 men + 22 women) | 132 |
 
 ### Points System
 
@@ -50,13 +96,19 @@ Each team plays every other team in their division twice (home and away).
 | Draw | 1 |
 | Loss | 0 |
 
+**Club points = Men's points + Women's points**
+
 ### Tiebreakers (in order)
 
-1. Head-to-head record
-2. Goal difference
-3. Goals scored
-4. Disciplinary points (fewer cards = better)
+1. Head-to-head CLUB record (combined results when clubs played each other)
+2. Combined goal difference (men's GD + women's GD)
+3. Combined goals scored
+4. Disciplinary points (fewer cards = better, both teams combined)
 5. Coin flip
+
+### Championship
+
+The club with the most combined points wins the league championship - not individual men's or women's teams, but the CLUB.
 
 ## Club Requirements
 
