@@ -1,8 +1,32 @@
-# Texas Adult Soccer League Model
+# Texas Select League Model
 
 ## Overview
 
-ballsackOS is built to power an adult recreational soccer league in Texas, inspired by the KC Select League model but with key enhancements including women's divisions and integrated sponsorship.
+ballsackOS powers a competitive adult soccer league in Texas - not just "rec soccer," but a legitimate pathway for serious players.
+
+### Who Plays Here
+
+| Player Type | What They Get |
+|-------------|---------------|
+| **Near-pro talent** | Competitive outlet when life chose a different path |
+| **Aspiring players** | Development pathway to college, semi-pro, or pro |
+| **Future coaches** | Tactical experience and coaching opportunities |
+| **Future referees** | Training ground for officiating careers |
+| **Career changers** | Pathway into soccer industry jobs |
+| **Competitive adults** | High-level play while maintaining careers/families |
+| **Fitness-focused** | Structured competition to stay sharp |
+
+### What Makes This Different
+
+This isn't a beer league. It's organized, competitive, and developmental:
+
+- **Real club structure** with promotion/relegation pressure
+- **Combined gender scoring** - clubs win together
+- **Quality competition** - internal competition keeps standards high
+- **Career pathways** - into coaching, refereeing, administration
+- **Professional organization** - scheduling, stats, broadcasting
+
+Inspired by the KC Select League model but enhanced with women's integration, sponsorship platform, and modern technology.
 
 ## League Structure
 

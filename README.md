@@ -1,8 +1,10 @@
 # ballsackOS
 
-**Texas Adult Soccer League Management Platform**
+**Texas Select League Management Platform**
 
-A comprehensive soccer league management system built for the Texas adult recreational soccer community. Designed from the ground up with sponsorship and advertising capabilities, live broadcasting support, and mobile-first field-side experience.
+A comprehensive soccer league management system for competitive adult soccer in Central Texas. This isn't rec soccer - it's a legitimate pathway for serious players who can't go pro due to life choices, aspiring players developing toward higher levels, and adults who want real competition while building careers and families.
+
+**Key differentiator:** Combined gender match days where men's and women's results determine club championships together. No other adult league does this.
 
 **Title Sponsor:** [Texian Insurance](https://texianinsurance.com)
 
