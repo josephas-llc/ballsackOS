@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TRPCProvider } from "@/lib/trpc-provider";
+import { SessionProvider } from "@/lib/session-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ballsackOS - Texas Adult Soccer League",
-  description: "Soccer league management for Texas adult recreational leagues",
+  title: "Chisholm FC League",
+  description: "Competitive adult soccer league on the I-35 corridor in Central Texas",
 };
 
 export default function RootLayout({
@@ -29,7 +30,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <TRPCProvider>{children}</TRPCProvider>
+        <SessionProvider>
+          <TRPCProvider>{children}</TRPCProvider>
+        </SessionProvider>
       </body>
     </html>
   );
