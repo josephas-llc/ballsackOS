@@ -24,6 +24,7 @@
 
 | Document | Description |
 |----------|-------------|
+| [Central Texas Market](/docs/business/CENTRAL_TEXAS_MARKET.md) | I-35 corridor analysis, 12 target clubs |
 | [League Model](/docs/business/LEAGUE_MODEL.md) | Texas league structure and rules |
 | [Sponsorship](/docs/business/SPONSORSHIP.md) | Sponsorship tiers and ad system |
 | [Revenue Model](/docs/business/REVENUE.md) | Pricing and business projections |
