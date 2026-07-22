@@ -94,28 +94,57 @@ Dallas and Houston are better served by their own regional leagues. Central Texa
 
 ## League Structure
 
-### With 12 Clubs
+### With 12 Clubs (2-3 teams per club)
 
 ```
 Texas Select League
-├── Men's Premier Division (12 teams)
-├── Men's Open Division (12 teams)
-├── Women's Premier Division (12 teams)
-└── Women's Open Division (12 teams)
+├── Men's Premier Division (~12 teams) - competitive
+├── Men's Open Division (~12 teams) - recreational
+├── Women's Premier Division (~12 teams) - competitive
+└── Women's Open Division (~12 teams) - recreational
 ```
 
-**Total: 48 teams**
+**Total: ~36-48 teams** (depending on club participation)
+
+### Internal Club Competition
+
+Each club fields 2-3 teams per gender, creating internal competition:
+
+```
+Example: Round Rock United
+├── Men's Premier (top players)
+├── Men's Open (developing/recreational)
+├── Women's Premier (top players)
+└── Women's Open (developing/recreational)
+```
+
+**Why this matters:**
+
+| Benefit | Description |
+|---------|-------------|
+| **Promotion pressure** | Open players pushing for Premier spots |
+| **Relegation risk** | Premier players can't get lazy or lose their spot |
+| **Development pathway** | Clear progression within the club |
+| **Roster depth** | Injuries/absences covered by call-ups |
+| **Training intensity** | Everyone competing for limited Premier roster spots |
+
+### Promotion/Relegation (Within Club)
+
+- Club coaches/managers evaluate players each season
+- Top performers in Open get promoted to Premier
+- Underperforming Premier players move to Open
+- Creates meritocracy - earn your spot or lose it
 
 ### Season Format
 
 | Metric | Value |
 |--------|-------|
-| Teams per division | 12 |
+| Teams per division | 10-12 |
 | Format | Double round-robin |
-| Games per team | 22 (11 home, 11 away) |
-| Total games per division | 132 |
-| Total games per season | 528 |
-| Season length | ~16-20 weeks |
+| Games per team | 18-22 (9-11 home, 9-11 away) |
+| Total games per division | 90-132 |
+| Total games per season | 360-528 |
+| Season length | ~14-18 weeks |
 
 ### Game Distribution
 

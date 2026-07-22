@@ -68,6 +68,35 @@ Each team plays every other team in their division twice (home and away).
 - Club administrator
 - Club colors/branding
 
+### Recommended Structure (2-3 teams per gender)
+
+```
+Club Example: Round Rock United
+├── Men's Premier (top 20-25 players)
+├── Men's Open (next 20-25 players)
+├── Women's Premier (top 20-25 players)
+└── Women's Open (next 20-25 players)
+```
+
+### Internal Club Competition
+
+Multiple teams per gender creates healthy internal competition:
+
+| Benefit | Description |
+|---------|-------------|
+| **Promotion pressure** | Open players train harder to earn Premier spots |
+| **Relegation risk** | Premier players stay sharp or lose their roster spot |
+| **Development pathway** | Clear progression within the club |
+| **Roster depth** | Call-ups available for injuries/absences |
+| **Quality of play** | Competition for spots raises everyone's game |
+
+### Intra-Club Promotion/Relegation
+
+- Clubs manage their own internal player movement
+- End of season evaluations determine promotions/relegations
+- Mid-season moves allowed with club approval
+- Players earn their spot through performance, not politics
+
 ### Team Requirements
 
 - Minimum 11 registered players per team
