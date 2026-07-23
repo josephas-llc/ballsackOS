@@ -1,5 +1,9 @@
 # ballsackOS Documentation
 
+## Project Status
+
+**3 of 28 issues completed** - Authentication, Admin Dashboard, and League Rules are done. Next: database setup.
+
 ## Quick Links
 
 - [README](/README.md) - Project overview and getting started
@@ -25,10 +29,12 @@
 | Document | Description |
 |----------|-------------|
 | [Central Texas Market](/docs/business/CENTRAL_TEXAS_MARKET.md) | I-35 corridor analysis, 12 target clubs |
-| [League Model](/docs/business/LEAGUE_MODEL.md) | Texas league structure and rules |
+| [League Model](/docs/business/LEAGUE_MODEL.md) | Texas league structure and combined gender scoring |
+| [League Rules](/docs/business/RULES.md) | **NEW** - FIFA-aligned competition rules |
 | [Sponsorship](/docs/business/SPONSORSHIP.md) | Sponsorship tiers and ad system |
 | [Revenue Model](/docs/business/REVENUE.md) | Pricing and business projections |
 | [Features](/docs/business/FEATURES.md) | Complete feature overview |
+| [Business Plan](/docs/business/BUSINESS_PLAN.md) | 10-year vision and growth strategy |
 
 ## Reference Materials
 
@@ -40,20 +46,20 @@
 
 ### Phase 1: MVP
 
-| Issue | Title | Labels |
+| Issue | Title | Status |
 |-------|-------|--------|
-| [#1](https://github.com/josephas-llc/ballsackOS/issues/1) | Set up PostgreSQL on Linux VM | infrastructure |
-| [#2](https://github.com/josephas-llc/ballsackOS/issues/2) | Implement NextAuth.js authentication | |
-| [#3](https://github.com/josephas-llc/ballsackOS/issues/3) | Build Admin Dashboard | |
-| [#4](https://github.com/josephas-llc/ballsackOS/issues/4) | Build Player Portal | |
-| [#5](https://github.com/josephas-llc/ballsackOS/issues/5) | Build Fan/Spectator Public Site | sponsorship |
-| [#7](https://github.com/josephas-llc/ballsackOS/issues/7) | Schedule Optimization Algorithm | scheduling |
-| [#8](https://github.com/josephas-llc/ballsackOS/issues/8) | Referee Assignment System | scheduling |
-| [#9](https://github.com/josephas-llc/ballsackOS/issues/9) | Texian Insurance Title Sponsorship | sponsorship |
-| [#17](https://github.com/josephas-llc/ballsackOS/issues/17) | Deployment & CI/CD Pipeline | infrastructure |
-| [#18](https://github.com/josephas-llc/ballsackOS/issues/18) | Live Score Entry | |
-| [#22](https://github.com/josephas-llc/ballsackOS/issues/22) | Venue & Field Management | scheduling |
-| [#28](https://github.com/josephas-llc/ballsackOS/issues/28) | Texas League Rules Configuration | |
+| ~~[#2](https://github.com/josephas-llc/ballsackOS/issues/2)~~ | ~~Implement NextAuth.js authentication~~ | **DONE** |
+| ~~[#3](https://github.com/josephas-llc/ballsackOS/issues/3)~~ | ~~Build Admin Dashboard~~ | **DONE** |
+| ~~[#28](https://github.com/josephas-llc/ballsackOS/issues/28)~~ | ~~Texas League Rules Configuration~~ | **DONE** |
+| [#1](https://github.com/josephas-llc/ballsackOS/issues/1) | Set up PostgreSQL on Linux VM | Pending |
+| [#4](https://github.com/josephas-llc/ballsackOS/issues/4) | Build Player Portal | Pending |
+| [#5](https://github.com/josephas-llc/ballsackOS/issues/5) | Build Fan/Spectator Public Site | Pending |
+| [#7](https://github.com/josephas-llc/ballsackOS/issues/7) | Schedule Optimization Algorithm | Pending |
+| [#8](https://github.com/josephas-llc/ballsackOS/issues/8) | Referee Assignment System | Pending |
+| [#9](https://github.com/josephas-llc/ballsackOS/issues/9) | Texian Insurance Title Sponsorship | Pending |
+| [#17](https://github.com/josephas-llc/ballsackOS/issues/17) | Deployment & CI/CD Pipeline | Pending |
+| [#18](https://github.com/josephas-llc/ballsackOS/issues/18) | Live Score Entry | Pending |
+| [#22](https://github.com/josephas-llc/ballsackOS/issues/22) | Venue & Field Management | Pending |
 
 ### Phase 2: Core
 

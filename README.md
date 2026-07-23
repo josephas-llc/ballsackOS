@@ -10,7 +10,24 @@ This isn't rec soccer - it's a legitimate pathway for serious players who can't 
 
 **Title Sponsor:** [Texian Insurance](https://texianinsurance.com)
 
-## Features
+## Current Status
+
+**Built & Working:**
+- NextAuth.js v5 authentication (credentials + Google OAuth)
+- Admin dashboard with sidebar navigation
+- League/Club/Team/Schedule management pages (mock data)
+- Public homepage with league branding
+- Prisma schema for full data model
+- tRPC API foundation
+- Comprehensive league rules (FIFA/US Soccer aligned)
+
+**Next Up:**
+- Connect PostgreSQL database
+- Seed 12 I-35 corridor clubs
+- Replace mock data with real queries
+- Build public fan-facing pages
+
+## Features (Planned)
 
 - **League Management** - Seasons, divisions, clubs, teams, players
 - **Game Scheduling** - Intelligent scheduling with conflict detection and optimization
@@ -95,44 +112,44 @@ ballsackOS/
 
 Core functionality to launch a functional league:
 
-- [#1](../../issues/1) PostgreSQL setup on Linux VM
-- [#2](../../issues/2) Authentication (NextAuth.js)
-- [#3](../../issues/3) Admin Dashboard
-- [#4](../../issues/4) Player Portal
-- [#5](../../issues/5) Fan/Spectator Public Site
-- [#7](../../issues/7) Schedule Optimization Algorithm
-- [#8](../../issues/8) Referee Assignment System
-- [#9](../../issues/9) Texian Insurance Title Sponsorship
-- [#17](../../issues/17) Deployment & CI/CD
-- [#18](../../issues/18) Live Score Entry
-- [#22](../../issues/22) Venue & Field Management
-- [#28](../../issues/28) Texas League Rules Configuration
+- [x] ~~[#2](../../issues/2) Authentication (NextAuth.js)~~ **DONE**
+- [x] ~~[#3](../../issues/3) Admin Dashboard~~ **DONE**
+- [x] ~~[#28](../../issues/28) Texas League Rules Configuration~~ **DONE**
+- [ ] [#1](../../issues/1) PostgreSQL setup on Linux VM
+- [ ] [#4](../../issues/4) Player Portal
+- [ ] [#5](../../issues/5) Fan/Spectator Public Site
+- [ ] [#7](../../issues/7) Schedule Optimization Algorithm
+- [ ] [#8](../../issues/8) Referee Assignment System
+- [ ] [#9](../../issues/9) Texian Insurance Title Sponsorship
+- [ ] [#17](../../issues/17) Deployment & CI/CD
+- [ ] [#18](../../issues/18) Live Score Entry
+- [ ] [#22](../../issues/22) Venue & Field Management
 
 ### Phase 2: Core Features
 
 Enhanced functionality after MVP launch:
 
-- [#6](../../issues/6) Live Broadcasting System
-- [#10](../../issues/10) Sponsor Analytics Dashboard
-- [#11](../../issues/11) Tournament System
-- [#12](../../issues/12) Notifications (Email, SMS, Push)
-- [#13](../../issues/13) PWA & Mobile Experience
-- [#14](../../issues/14) Player Registration & Payments
-- [#19](../../issues/19) Stats & Leaderboards
-- [#20](../../issues/20) Club Branding & Subdomains
-- [#21](../../issues/21) Calendar Integration
-- [#23](../../issues/23) Disciplinary System
-- [#24](../../issues/24) Team Messaging
-- [#26](../../issues/26) SEO & Social Media
+- [ ] [#6](../../issues/6) Live Broadcasting System
+- [ ] [#10](../../issues/10) Sponsor Analytics Dashboard
+- [ ] [#11](../../issues/11) Tournament System
+- [ ] [#12](../../issues/12) Notifications (Email, SMS, Push)
+- [ ] [#13](../../issues/13) PWA & Mobile Experience
+- [ ] [#14](../../issues/14) Player Registration & Payments
+- [ ] [#19](../../issues/19) Stats & Leaderboards
+- [ ] [#20](../../issues/20) Club Branding & Subdomains
+- [ ] [#21](../../issues/21) Calendar Integration
+- [ ] [#23](../../issues/23) Disciplinary System
+- [ ] [#24](../../issues/24) Team Messaging
+- [ ] [#26](../../issues/26) SEO & Social Media
 
 ### Phase 3: Advanced Features
 
 Polish and expansion:
 
-- [#15](../../issues/15) Multi-language Support (Spanish)
-- [#16](../../issues/16) Public API & Developer Access
-- [#25](../../issues/25) Photo & Media Gallery
-- [#27](../../issues/27) Data Import/Export Tools
+- [ ] [#15](../../issues/15) Multi-language Support (Spanish)
+- [ ] [#16](../../issues/16) Public API & Developer Access
+- [ ] [#25](../../issues/25) Photo & Media Gallery
+- [ ] [#27](../../issues/27) Data Import/Export Tools
 
 ## League Structure
 
